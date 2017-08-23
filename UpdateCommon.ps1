@@ -24,6 +24,8 @@
 ##
 Import-Module "$PSScriptRoot\Git.ps1"
 
+Git-GetEnv -Mandatory
+
 # Download new sources
 Git-Clone -Source "https://github.com/AndyD87/Powershell-Common.git" -Target "Powershell-Common"
 

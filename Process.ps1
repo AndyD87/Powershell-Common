@@ -39,9 +39,9 @@ Function Process-RunInIse
     Target Outputfolder will be $Global:PortableAppsDir.
     This can be overwritten by setteing the System Variable PORTABLE_APPS_DIR with a different location.
 .PARAMETER Executable
-    Application to Exectute, Full path is not required if it is available in PATH
+    Application to Exectute, Full path is not required if it is available in PATH.
 .PARAMETER Arguments
-    Use a different Store if necessary, default: $Global:_BcdDefaultStore
+    Arguments to pass to Application like in commandline.
 .PARAMETER WorkingDir
     Use a different Working Directory than current.
 .PARAMETER ExitCode
@@ -100,11 +100,11 @@ Function Process-StartAndGetOutputAndExit
     Target Outputfolder will be $Global:PortableAppsDir.
     This can be overwritten by setteing the System Variable PORTABLE_APPS_DIR with a different location.
 .PARAMETER Executable
-    Application to Exectute, Full path is not required if it is available in PATH
+    Application to Exectute, Full path is not required if it is available in PATH.
 .PARAMETER Arguments
-    Use a different Store if necessary, default: $Global:_BcdDefaultStore
+    Arguments to pass to Application like in commandline.
 .PARAMETER WorkingDir
-    Use a different Working Directorz than current.
+    Use a different Working Directory than current.
 .EXAMPLE
     $Output Process-StartAndGetOutput bcdedit -Arguments "/enum all"
     Write-Output $Output

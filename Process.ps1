@@ -44,6 +44,8 @@ Function Process-RunInIse
     Use a different Store if necessary, default: $Global:_BcdDefaultStore
 .PARAMETER WorkingDir
     Use a different Working Directory than current.
+.PARAMETER ExitCode
+    Value will be overwritten with ExitCode of Process
 .EXAMPLE
     $ExitCode = -1
     Process-StartAndGetOutput bcdedit -Arguments "/enum all" -ExitCode ([ref]$ExitCode)

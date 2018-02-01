@@ -24,6 +24,8 @@
 ##
 Import-Module "$PSScriptRoot\Process.ps1" -Force
 
+$Global:_BcdDefaultStore = ""
+
 <#
 .SYNOPSIS
     Execute a bcdedit command on commandline and get it`s output.
@@ -59,6 +61,26 @@ Function Bcd-Exec()
     {
         throw "BCD Execution failed"
     }
+}
+
+<#
+.SYNOPSIS
+    Set path to BCD store to working with by default
+.DESCRIPTION
+    Change value of $Global:_BcdDefaultStore with a commandlet
+.PARAMETER Store
+    Path to BCD Store as string
+.EXAMPLE
+    Bcd-SetGlobalStore "C:\boot\BCD"
+#>
+Function Bcd-SetGlobalStore
+{
+    PARAM(
+        [Parameter(Mandatory=$True, Position=1)]
+        [string]$Store
+    )
+
+    $Global:_BcdDefaultStore = $Store
 }
 
 <#

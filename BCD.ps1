@@ -125,3 +125,43 @@ Function Bcd-SetupKernelDebugNetwork
 
     return $Output
 }
+
+<#
+.SYNOPSIS
+    Enable Testsigned Driver on target windows
+.DESCRIPTION
+    Return value is the installed network key
+.PARAMETER Enable
+    if $true, turn Testsigning on.
+    if $false, turn Testsigning off.
+.PARAMETER Target
+    Target entry in BCD, default not set
+.EXAMPLE
+    Bcd-SetTestsigning $true "{current}"
+    Bcd-SetTestsigning -Enable $false
+#>
+Function Bcd-SetTestsigning
+{
+    PARAM(
+        [Parameter(Mandatory=$True, Position=1)]
+        [bool]$Enable,
+        [Parameter(Mandatory=$False, Position=2)]
+        [string]$Target = ""
+    )
+    
+    $sSet = "/set"
+    if([string]::IsNullOrEmpty($Target) -eq $False)
+    {
+        $sSet += " $Target"
+    }
+    if($Enable)
+    {
+        [string]$sSet += " TESTSIGNING ON"
+    }
+    else
+    {
+        [string]$sSet += " TESTSIGNING OFF"
+    }
+    
+    [string]$Output = Bcd-Exec $sSet
+}

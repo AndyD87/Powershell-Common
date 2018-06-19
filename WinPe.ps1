@@ -53,10 +53,21 @@ Function WinPe-GetEnv
     }
     if($Global:WinPe_GetEnvDone -ne $true)
     {
-        $Win10Adk = "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
-        Invoke-CmdScript $Win10Adk
-        $Global:WinPe_GetEnvDone = $true;
-
+        $WinAdk = "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
+        if((Test-Path $WinAdk) -ne $true)
+        {
+            # 10 ADK Path not found, select 8.1 ADK Path
+            $WinAdk = "C:\Program Files (x86)\Windows Kits\8.1\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
+        }
+        if((Test-Path $WinAdk) -eq $true)
+        {
+            Invoke-CmdScript $WinAdk
+            $Global:WinPe_GetEnvDone = $true;
+        }
+        else
+        {
+            throw "Windows ADK not found";
+        }
     }
 }
 
@@ -64,9 +75,9 @@ Function WinPe-GetEnv
 Function WinPe-CreateIso
 {
     PARAM(
+        [string]$AdditionalFiles = "",
         [string]$Architecture = "amd64",
-        [string]$TargetIso = "WinPE.iso",
-        [string]$AdditionalFiles = ""
+        [string]$TargetIso = "WinPE.iso"
     )
     $sTempDir = New-TemporaryDirectory
     Remove-Item -Recurse -Force $sTempDir -ErrorAction Stop
@@ -98,5 +109,3 @@ Function WinPe-CreateIso
     }
     Remove-Item -Recurse -Force $sTempDir -ErrorAction Stop
 }
-
-WinPe-CreateIso

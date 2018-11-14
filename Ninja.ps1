@@ -22,7 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ##
-$Global:PortableNinjaDownload  = "http://mirror.adirmeier.de/projects/ThirdParty/Ninja/binaries/1.7.2.0/Ninja.zip"
+$Global:PortableNinjaDownload  = "http://coolcow.de/projects/ThirdParty/Ninja/binaries/1.7.2.0/Ninja.zip"
 $Global:PortableNinjaName      = "Ninja"
 $Global:PortableNinjaBinDir    = "\"
 

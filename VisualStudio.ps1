@@ -98,9 +98,13 @@ Function VisualStudio-GetEnv
                 {
                     Invoke-CmdScript "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" $Architecture
                 }
+                elseif (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat")
+                {
+                    Invoke-CmdScript "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" $Architecture
+                }
                 else
                 {
-                    throw "Wether Community nor Professtional Edition of VS2017 was found"
+                    throw "Wether Community nor Professional nor Enterprise Edition of VS2017 was found"
                 }
                 if($LASTEXITCODE -ne 0)
                 {

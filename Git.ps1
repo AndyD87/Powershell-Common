@@ -29,6 +29,7 @@ Import-Module "$PSScriptRoot\Web.ps1"
 $Global:PortableGitDownload  = "http://coolcow.de/projects/ThirdParty/Git/binaries/2.14.1.0/Git.32bit.zip"
 $Global:PortableGitName      = "Git"
 $Global:PortableGitBinDir    = "bin"
+$Global:IgnoreSsl            = $false
 
 Function Git-GetEnv
 {
@@ -56,17 +57,32 @@ Function Git-GetEnv
     }
 }
 
+Function Git-SetIgnoreSslError
+{
+    PARAM(
+        [Parameter(Mandatory=$true, Position=1)]
+        [bool]$Ignore
+    )
+    $Global:IgnoreSsl = $Ignore
+}
+
 Function Git-Execute
 {
     PARAM(
         [Parameter(Mandatory=$true, Position=1)]
-        [string]$Arguments
+        [string]$Arguments,
+        [Parameter(Mandatory=$false, Position=2)]
+        [string]$WorkingDir = ""
     )
     if(-not(Get-Command git -ErrorAction SilentlyContinue))
     {
         Git-GetEnv -Mandatory
     }
-    Process-StartInlineAndThrow "git" "$Arguments"
+    if($Global:IgnoreSsl)
+    {
+        $env:GIT_SSL_NO_VERIFY = "true"
+    }
+    Process-StartInlineAndThrow "git" "$Arguments" -WorkingDir $WorkingDir
 }
 
 Function Git-Clone
@@ -75,9 +91,28 @@ Function Git-Clone
         [Parameter(Mandatory=$true, Position=1)]
         [string]$Source,
         [Parameter(Mandatory=$true, Position=2)]
-        [string]$Target
+        [string]$Target,
+        [Parameter(Mandatory=$false)]
+        [switch]$Lfs,
+        [Parameter(Mandatory=$false)]
+        [switch]$Mirror
     )
-    Git-Execute "clone `"$Source`" `"$Target`""
+
+    $sParamLine = "clone"
+
+    if($Source.Length -gt 0 -and $Target.Length -gt 0)
+    {
+        if($Mirror.IsPresent)
+        {
+            $sParamLine = $sParamLine + " --mirror"
+        }
+        $sParamLine = $sParamLine + " `"$Source`" `"$Target`""
+        Git-Execute $sParamLine
+        if($Lfs.IsPresent)
+        {
+            Git-Execute "lfs fetch --all" -WorkingDir $Target
+        }
+    }
 }
 
 Function Git-Checkout
@@ -113,4 +148,26 @@ Function Git-Clean
     Git-Execute "clean -dfx"
 
     cd $CurrentDir
+}
+
+Function Git-Pull
+{
+    PARAM(
+        [Parameter(Mandatory=$true, Position=1)]
+        [string]$Target,
+        [Parameter(Mandatory=$false)]
+        [switch]$Lfs,
+        [Parameter(Mandatory=$false)]
+        [switch]$Mirror
+    )
+    $sParamLine = "pull"
+    if($Mirror.IsPresent)
+    {
+        $sParamLine = "remote update"
+    }
+    Git-Execute $sParamLine -WorkingDir $Target
+    if($Lfs.IsPresent)
+    {
+        Git-Execute "lfs fetch --all" -WorkingDir $Target
+    }
 }

@@ -90,8 +90,8 @@ Function Git-Clone
     PARAM(
         [Parameter(Mandatory=$true, Position=1)]
         [string]$Source,
-        [Parameter(Mandatory=$true, Position=2)]
-        [string]$Target,
+        [Parameter(Mandatory=$false, Position=2)]
+        [string]$Target = "",
         [Parameter(Mandatory=$false)]
         [switch]$Lfs,
         [Parameter(Mandatory=$false)]
@@ -100,18 +100,30 @@ Function Git-Clone
 
     $sParamLine = "clone"
 
-    if($Source.Length -gt 0 -and $Target.Length -gt 0)
+    if($Source.Length -gt 0)
     {
         if($Mirror.IsPresent)
         {
             $sParamLine = $sParamLine + " --mirror"
         }
-        $sParamLine = $sParamLine + " `"$Source`" `"$Target`""
+        $sParamLine = $sParamLine + " `"$Source`""
+        if($Target -ne "")
+        {
+            $sParamLine = $sParamLine + " `"$Target`""
+        }
+        else
+        {
+            $Target = Git-GetLocalPath $Source -Mirror:$Mirror
+        }
         Git-Execute $sParamLine
         if($Lfs.IsPresent)
         {
             Git-Execute "lfs fetch --all" -WorkingDir $Target
         }
+    }
+    else
+    {
+        throw "Empty Source is not allowed"
     }
 }
 
@@ -170,4 +182,22 @@ Function Git-Pull
     {
         Git-Execute "lfs fetch --all" -WorkingDir $Target
     }
+}
+
+Function Git-GetLocalPath
+{
+    PARAM(
+        [Parameter(Mandatory=$true, Position=1)]
+        [string]$Url,
+        [Parameter(Mandatory=$false, Position=2)]
+        [switch]$Mirror
+    )
+    $RepoName = $Url.Substring($Url.LastIndexOf("/") + 1)
+    if( $Mirror.IsPresent -eq $false -and
+        $RepoName.EndsWith(".git"))
+    {
+        $RepoName = $RepoName.Substring(0, $RepoName.Length -4)
+    }
+    $Target = (Get-Location).Path + "/" + $RepoName
+    return $Target
 }

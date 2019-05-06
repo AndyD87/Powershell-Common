@@ -98,7 +98,10 @@ Function 7Zip-Compress
         [Parameter(Mandatory=$True, Position=1)]
         [string]$OutputFile,
         [Parameter(Mandatory=$False, Position=2)]
-        [string]$Single = ""
+        [string]$Single = "",
+        [Parameter(Mandatory=$False, Position=2)]
+        [int]$Compression = 5
+
     )
 
     $Exe = 7Zip-GetExeName
@@ -110,12 +113,12 @@ Function 7Zip-Compress
         {
             #$CurrentDir = ((Get-Item -Path ".\" -Verbose).FullName)
             #cd $Single
-            Process-StartInlineAndThrow $Exe "u -y -mx=9 `"$OutputFile`" `"$Single\*`""
+            Process-StartInlineAndThrow $Exe "u -y -mx=$Compression `"$OutputFile`" `"$Single\*`""
             #cd $CurrentDir
         }
         else
         {
-            Process-StartInlineAndThrow $Exe "u -y -mx=9 `"$OutputFile`" `"$Single`""
+            Process-StartInlineAndThrow $Exe "u -y -mx=$Compression `"$OutputFile`" `"$Single`""
         }
     }
     else

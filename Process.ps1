@@ -133,7 +133,9 @@ Function Process-StartInline
         [Parameter(Mandatory=$false, Position=2)]
         [string]$Arguments = "",
         [Parameter(Mandatory=$false, Position=3)]
-        [string]$WorkingDir = ""
+        [string]$WorkingDir = "",
+        [Parameter(Mandatory=$false, Position=4)]
+        [bool]$Hidden = $false
     )
     $pinfo = New-Object System.Diagnostics.ProcessStartInfo
     if([string]::IsNullOrEmpty($WorkingDir))
@@ -144,6 +146,10 @@ Function Process-StartInline
     $pinfo.UseShellExecute = $false
     $pinfo.Arguments = $Arguments
     $pinfo.WorkingDirectory = $WorkingDir
+    if($Hidden)
+    {
+        $pinfo.WindowStyle =  [System.Diagnostics.ProcessWindowStyle]::Hidden
+    }
     $p = New-Object System.Diagnostics.Process
     if(Process-RunInIse)
     {
@@ -177,9 +183,11 @@ Function Process-StartInlineAndThrow
         [Parameter(Mandatory=$false, Position=2)]
         [string]$Arguments = "",
         [Parameter(Mandatory=$false, Position=3)]
-        [string]$WorkingDir = ""
-    )
-    if((Process-StartInline $Executable $Arguments $WorkingDir) -ne 0)
+        [string]$WorkingDir = "",
+        [Parameter(Mandatory=$false, Position=4)]
+        [bool]$Hidden = $false
+    ) 
+    if((Process-StartInline $Executable $Arguments $WorkingDir $Hidden) -ne 0)
     {
         throw "Failed: $Executable $Arguments"
     }

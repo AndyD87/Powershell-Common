@@ -82,7 +82,7 @@ Function Git-Execute
     {
         $env:GIT_SSL_NO_VERIFY = "true"
     }
-    Process-StartInlineAndThrow "git" "$Arguments" -WorkingDir $WorkingDir
+    Process-StartInlineAndThrow "git" "$Arguments" -WorkingDir $WorkingDir -Hidden $true
 }
 
 Function Git-Clone

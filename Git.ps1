@@ -184,6 +184,31 @@ Function Git-Pull
     }
 }
 
+Function Git-Push
+{
+    PARAM(
+        [Parameter(Mandatory=$true, Position=1)]
+        [string]$Target,
+        [Parameter(Mandatory=$false, Position=2)]
+        [string]$Url,
+        [Parameter(Mandatory=$false)]
+        [switch]$Lfs,
+        [Parameter(Mandatory=$false)]
+        [switch]$Mirror
+    )
+    if($Lfs.IsPresent)
+    {
+        Git-Execute "lfs push --all $Url" -WorkingDir $Target
+    }
+    $sParamLine = "push"
+    if($Mirror.IsPresent)
+    {
+        $sParamLine += " --mirror"
+    }
+    $sParamLine += " $Url"
+    Git-Execute $sParamLine -WorkingDir $Target
+}
+
 Function Git-GetLocalPath
 {
     PARAM(

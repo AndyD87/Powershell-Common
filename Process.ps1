@@ -149,6 +149,10 @@ Function Process-StartInline
     if($Hidden)
     {
         $pinfo.WindowStyle =  [System.Diagnostics.ProcessWindowStyle]::Hidden
+        if(Process-RunInIse)
+        {
+            $pinfo.CreateNoWindow = $true;
+        }
     }
     $p = New-Object System.Diagnostics.Process
     if(Process-RunInIse)

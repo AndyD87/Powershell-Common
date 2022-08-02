@@ -22,12 +22,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ##
-Import-Module "$PSScriptRoot\Git.ps1"
+Import-Module "$PSScriptRoot\Git.ps1" -Force
 
 Git-GetEnv -Mandatory
 
 # Download new sources
-Git-Clone -Source "https://github.com/AndyD87/Powershell-Common.git" -Target "Powershell-Common"
+Git-Clone -Source "https://coolcow.de/projects/Powershell-Common.git" -Target "Powershell-Common"
 
 # Copy downloaded sources
 Move-Item "$PSScriptRoot\Powershell-Common\*" ".\" -Force

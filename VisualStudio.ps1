@@ -102,6 +102,10 @@ Function VisualStudio-GetEnv
                 {
                     Invoke-CmdScript "C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" $Architecture
                 }
+                elseif (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvarsall.bat")
+                {
+                    Invoke-CmdScript "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" $Architecture
+                }
                 else
                 {
                     throw "Wether Community nor Professional nor Enterprise Edition of 2022 was found"
@@ -125,6 +129,10 @@ Function VisualStudio-GetEnv
                 {
                     Invoke-CmdScript "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" $Architecture
                 }
+                elseif (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat")
+                {
+                    Invoke-CmdScript "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" $Architecture
+                }
                 else
                 {
                     throw "Wether Community nor Professional nor Enterprise Edition of VS2019 was found"
@@ -147,6 +155,10 @@ Function VisualStudio-GetEnv
                 elseif (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat")
                 {
                     Invoke-CmdScript "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" $Architecture
+                }
+                elseif (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat")
+                {
+                    Invoke-CmdScript "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" $Architecture
                 }
                 else
                 {
@@ -264,6 +276,10 @@ Function VisualStudio-GetAvailable
     {
         $aVisualStudios += "2022";
     }
+    elseif (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvarsall.bat")
+    {
+        $aVisualStudios += "2022";
+    }
 
     
     if(Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Auxiliary\Build\vcvarsall.bat")
@@ -278,6 +294,10 @@ Function VisualStudio-GetAvailable
     {
         $aVisualStudios += "2019";
     }
+    elseif (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat")
+    {
+        $aVisualStudios += "2019";
+    }
 
     if(Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvarsall.bat")
     {
@@ -288,6 +308,10 @@ Function VisualStudio-GetAvailable
         $aVisualStudios += "2017";
     }
     elseif (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat")
+    {
+        $aVisualStudios += "2017";
+    }
+    elseif (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat")
     {
         $aVisualStudios += "2017";
     }
